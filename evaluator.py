@@ -75,23 +75,6 @@ def daysToMinutes(days):
 
 
 def groundStationUsageObj(problemInstance, schedule):
-    # requirements_grouped = defaultdict(lambda: list())
-    # for x in problemInstance.requirements:
-    #    requirements_grouped[x.SC].append(x)
-
-    # schedule_grouped = defaultdict(lambda: list())
-    # for x in schedule:
-    #    schedule_grouped[x.SC].append(x)
-
-    # FitGU = 0
-    # for SC, SC_requirements in requirements_grouped.items():
-    #    SC_schedule = schedule_grouped[SC]
-    #    for req in SC_requirements:
-    #        for sch in SC_schedule:
-    #            overlap = getOverlap([req.tBeg, req.tEnd], [sch.tStart, sch.tStart + sch.tDur])
-    #            FitGU += overlap
-    # return (FitGU / (daysToMinutes(problemInstance.nDays) * problemInstance.nGS)) * 100
-
     days_to_minutes = daysToMinutes(problemInstance.nDays)
     schedule_grouped = defaultdict(lambda: list())
     for x in schedule:
@@ -101,17 +84,16 @@ def groundStationUsageObj(problemInstance, schedule):
     for GS, events in schedule_grouped.items():
         events_times = [(x.tStart, min(days_to_minutes, x.tStart + x.tDur)) for x in events]
         union_times = unions(events_times)
-        #sm = 0
         for start, end in union_times:
             total_time += end - start
-            #sm+= end - start
-        #if sm>days_to_minutes:
-        #    print('dsfsf')
     f = (total_time / (days_to_minutes * problemInstance.nGS)) * 100
     return f
 
 
 class ScheduleEvaluator:
+    """
+    Evaluator that receives the problem instance and schedule and return objectives
+    """
     @staticmethod
     def evaluate(problemInstance, schedule):
         FitAW = accessWindowObj(problemInstance, schedule)

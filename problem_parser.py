@@ -4,6 +4,10 @@ from problem import Timewindow, Requirement, ProblemInstance
 
 class XMLProblemParser:
     def __init__(self, filename):
+        """
+        Parser that receives a path to one of the problems in XML format builds a problem from it.
+        :param filename: problem path and filename
+        """
         self.filename = filename
         doc = minidom.parse(filename)
         items = doc.getElementsByTagName('basic')
@@ -29,6 +33,10 @@ class XMLProblemParser:
             self.requirements.append(Requirement(SC=SC, tBeg=tBeg, tEnd=tEnd, tReq=tReq))
 
     def getProblem(self):
+        """
+        Returns the proper problem format
+        :return: instance of a problem
+        """
         return ProblemInstance(nDays=self.nDays,
                                nSC=self.nSC,
                                nGS=self.nGS,
